@@ -1,0 +1,24 @@
+<h2>{{ dish.name }}</h2>
+<p><strong>Опис:</strong> {{ dish.description }}</p>
+<p><strong>Ціна:</strong> {{ dish.price }} грн</p>
+<p><strong>Інгредієнти:</strong> {{ dish.ingredients }}</p>
+
+{% if dish.image %}
+    <img src="{{ dish.image.url }}" alt="{{ dish.name }}" width="300">
+{% else %}
+    <p><em>Зображення відсутнє</em></p>
+{% endif %}
+
+<br>
+<a href="{% url 'dish_list' dish.category.id %}">Назад до страв</a>
+
+{% if user.is_authenticated and user.role == "admin" %}
+    <a href="{% url 'dish_edit' dish.id %}">Редагувати</a>
+    <form method="post" action="{% url 'dish_delete' object.id %}" onsubmit="return confirm('Ви дійсно хочете видалити цю страву?');">
+        {% csrf_token %}
+        <button type="submit" style="color: red;">Видалити</button>
+    </form>
+{% endif %}
+
+
+

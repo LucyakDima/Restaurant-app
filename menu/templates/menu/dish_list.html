@@ -1,0 +1,12 @@
+<h2>Страви</h2>
+<ul>
+  {% for dish in dishes %}
+    <li>
+      <a href="{% url 'dish_detail' dish.id %}">{{ dish.name }}</a> — {{ dish.price }} грн
+    </li>
+  {% empty %}
+    <li>У цій категорії ще немає страв</li>
+  {% endfor %}
+</ul>
+
+<a href="{% url 'category_list' %}">Назад до категорій</a>

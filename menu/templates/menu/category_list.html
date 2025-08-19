@@ -1,0 +1,10 @@
+<h2>Категорії</h2>
+<ul>
+  {% for category in categories %}
+    <li>
+      <a href="{% url 'dish_list' category.id %}">{{ category.name }}</a>
+    </li>
+  {% empty %}
+    <li>Категорій поки немає</li>
+  {% endfor %}
+</ul>
