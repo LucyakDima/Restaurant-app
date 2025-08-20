@@ -1,0 +1,16 @@
+{% if user.is_authenticated %}
+    <p>Вітаємо, {{ user.username }}!</p>
+    <p>
+        <a href="{% url 'category_list' %}">Меню</a> |
+        <form action="{% url 'logout' %}" method="post" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit">Вийти</button>
+        </form>
+    </p>
+{% else %}
+    <p>
+        <a href="{% url 'login' %}">Увійти</a> |
+        <a href="{% url 'register' %}">Зареєструватися</a>
+    </p>
+    <p><a href="{% url 'category_list' %}">Меню</a></p>
+{% endif %}

@@ -16,7 +16,7 @@
     <a href="{% url 'dish_edit' dish.id %}">Редагувати</a>
     <form method="post" action="{% url 'dish_delete' object.id %}" onsubmit="return confirm('Ви дійсно хочете видалити цю страву?');">
         {% csrf_token %}
-        <button type="submit" style="color: red;">Видалити</button>
+        <button type="submit">Видалити</button>
     </form>
 {% endif %}
 
