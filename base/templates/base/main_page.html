@@ -1,7 +1,9 @@
 {% if user.is_authenticated %}
-    <p>Вітаємо, {{ user.username }}!</p>
+    <p>Вітаємо,
+    <a href="{% url 'profile' %}">{{ user.username }}</a>!</p>
     <p>
-        <a href="{% url 'category_list' %}">Меню</a>
+        <a href="{% url 'category_list' %}">Меню</a> |
+        <a href="{% url 'cart_detail' %}">Кошик</a>
         <form action="{% url 'logout' %}" method="post" style="display:inline;">
             {% csrf_token %}
             <button type="submit" onclick="return confirm('Ви впевнені, що хочете вийти?');">Вийти</button>

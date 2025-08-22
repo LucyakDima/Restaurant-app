@@ -3,6 +3,13 @@
   {% for dish in dishes %}
     <li>
       <a href="{% url 'dish_detail' dish.id %}">{{ dish.name }}</a> — {{ dish.price }} грн
+      {% if user.is_authenticated %}
+          {% if dish.id in cart_items %}
+              <a href="{% url 'cart_detail' %}">Переглянути у кошику</a>
+          {% else %}
+              <a href="{% url 'add_to_cart' dish.id %}">Додати у кошик</a>
+          {% endif %}
+      {% endif %}
     </li>
   {% empty %}
     <li>У цій категорії ще немає страв</li>

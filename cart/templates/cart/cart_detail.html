@@ -1,0 +1,17 @@
+<h1>Кошик</h1>
+
+{% if cart.items.all %}
+    <ul>
+    {% for item in cart.items.all %}
+        <li>
+            {{ item.dish.name }} — {{ item.quantity }} × {{ item.dish.price }} = {{ item.total_price }}
+            <a href="{% url 'update_quantity' item.id 'increase' %}">+</a>
+            <a href="{% url 'update_quantity' item.id 'decrease' %}">-</a>
+            <a href="{% url 'remove_from_cart' item.id %}">Видалити</a>
+        </li>
+    {% endfor %}
+    </ul>
+    <p>Загальна сума: {{ cart.total_price }} грн</p>
+{% else %}
+    <p>Кошик порожній</p>
+{% endif %}

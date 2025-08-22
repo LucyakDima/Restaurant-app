@@ -3,6 +3,7 @@ from .models import Category, Dish
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.views.generic import UpdateView, DeleteView
 from django.urls import reverse_lazy
+from cart.models import Cart   # 🔹 імпортуємо кошик
 
 
 class CategoryListView(ListView):
@@ -20,11 +21,29 @@ class DishListView(ListView):
         category_id = self.kwargs.get("category_id")
         return Dish.objects.filter(category_id=category_id, is_available=True)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            cart, created = Cart.objects.get_or_create(user=self.request.user)
+            context["cart_items"] = [item.dish.id for item in cart.items.all()]
+        else:
+            context["cart_items"] = []
+        return context
+
 
 class DishDetailView(DetailView):
     model = Dish
     template_name = "menu/dish_detail.html"
     context_object_name = "dish"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            cart, created = Cart.objects.get_or_create(user=self.request.user)
+            context["cart_items"] = [item.dish.id for item in cart.items.all()]
+        else:
+            context["cart_items"] = []
+        return context
 
 
 class DishUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -48,4 +67,3 @@ class DishDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
-

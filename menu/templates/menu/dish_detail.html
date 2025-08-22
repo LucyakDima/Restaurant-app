@@ -9,6 +9,16 @@
     <p><em>Зображення відсутнє</em></p>
 {% endif %}
 
+{% if user.is_authenticated %}
+    {% if dish.id in cart_items %}
+        <a href="{% url 'cart_detail' %}">Переглянути у кошику</a>
+    {% else %}
+        <a href="{% url 'add_to_cart' dish.id %}">Додати у кошик</a>
+    {% endif %}
+{% else %}
+    <p><a href="{% url 'login' %}">Увійдіть</a>, щоб додати у кошик</p>
+{% endif %}
+
 <br>
 <a href="{% url 'dish_list' dish.category.id %}">Назад до страв</a>
 
@@ -19,6 +29,3 @@
         <button type="submit">Видалити</button>
     </form>
 {% endif %}
-
-
-
