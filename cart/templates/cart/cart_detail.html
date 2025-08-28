@@ -12,6 +12,7 @@
     {% endfor %}
     </ul>
     <p>Загальна сума: {{ cart.total_price }} грн</p>
+    <p><a href="{% url 'create_order' %}">Оформити замовлення</a></p>
 {% else %}
     <p>Кошик порожній</p>
 {% endif %}

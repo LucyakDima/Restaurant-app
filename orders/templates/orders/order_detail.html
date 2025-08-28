@@ -1,0 +1,15 @@
+<h1>Замовлення #{{ order.id }}</h1>
+<p>Статус: {{ order.get_status_display }}</p>
+<p>Дата: {{ order.created_at }}</p>
+
+<ul>
+    {% for item in order.items.all %}
+        <li>{{ item.dish.name }} — {{ item.quantity }} х {{ item.price }} = {{ item.total_price }}</li>
+    {% endfor %}
+</ul>
+
+<p><strong>Загальна сума:</strong> {{ order.total_price }} грн</p>
+
+<a href="{% url 'repeat_order' order.id %}">Повторити замовлення</a>
+<a href="{% url 'delete_order' order.id %}" onclick="return confirm('Видалити це замовлення?');">Видалити</a>
+<a href="{% url 'order_list' %}">Назад до списку</a>

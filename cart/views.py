@@ -5,7 +5,7 @@ from .models import Cart, ItemInCart
 
 @login_required
 def cart_detail(request):
-    cart, careated = Cart.objects.get_or_create(user=request.user)
+    cart, created = Cart.objects.get_or_create(user=request.user)
     return render(request, "cart/cart_detail.html", {"cart": cart})
 
 @login_required

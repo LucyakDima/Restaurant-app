@@ -1,0 +1,15 @@
+<h1>Мої замовлення</h1>
+
+<ul>
+    {% for order in orders %}
+        <li>
+            <a href="{% url 'order_detail' order.id %}">
+                Замовлення #{{ order.id }} — {{ order.get_status_display }} — {{ order.total_price }} грн
+            </a>
+            | <a href="{% url 'repeat_order' order.id %}">Повторити</a>
+            | <a href="{% url 'delete_order' order.id %}" onclick="return confirm('Видалити це замовлення?');">Видалити</a>
+        </li>
+    {% empty %}
+        <li>У вас ще немає замовлень.</li>
+    {% endfor %}
+</ul>

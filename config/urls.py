@@ -16,7 +16,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from menu.views import CategoryListView
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -26,6 +25,7 @@ urlpatterns = [
     path('cart/', include('cart.urls')),
     path('accounts/', include('accounts.urls')),
     path('menu/', include('menu.urls')),
+    path("orders/", include("orders.urls")),
 ]
 
 if settings.DEBUG:
