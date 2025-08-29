@@ -19,6 +19,8 @@
     <p><a href="{% url 'login' %}">Увійдіть</a>, щоб додати у кошик</p>
 {% endif %}
 
+<a href="{% url 'review_list' dish.id %}">Переглянути відгуки</a>
+
 <br>
 <a href="{% url 'dish_list' dish.category.id %}">Назад до страв</a>
 

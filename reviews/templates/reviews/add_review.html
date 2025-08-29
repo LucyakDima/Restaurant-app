@@ -1,0 +1,15 @@
+<h2>Додати відгук для {{ dish.name }}</h2>
+
+{% if messages %}
+  {% for message in messages %}
+    <p style="color: red;">{{ message }}</p>
+  {% endfor %}
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Зберегти</button>
+</form>
+
+<a href="{% url 'review_list' dish.id %}">Назад до відгуків</a>
