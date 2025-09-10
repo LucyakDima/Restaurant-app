@@ -1,0 +1,29 @@
+{% include 'base/main_p_head.html' %}
+
+<h2>Результати пошуку для "{{ query }}"</h2>
+
+{% if dishes %}
+    <h3>{{ dish.category }}</h3>
+    <ul>
+        {% for dish in dishes %}
+            <li>
+                <a href="{% url 'dish_detail' dish.id %}">{{ dish.name }}</a> - {{ dish.price }} грн
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Такої страви немає</p>
+{% endif %}
+
+{% if categories %}
+    <h3>Категорії</h3>
+    <ul>
+        {% for cat in categories %}
+            <li>
+                <a href="{% url 'dish_list' cat.id %}">{{ cat.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<a href="{% url 'home' %}">Назад</a>

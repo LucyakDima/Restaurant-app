@@ -1,3 +1,5 @@
+{% include 'base/main_p_head.html' %}
+
 <h2>Мій профіль</h2>
 
 <p><strong>Username:</strong> {{ user.username }}</p>
@@ -11,3 +13,4 @@
     {% csrf_token %}
     <button type="submit" onclick="return confirm('Ви впевнені, що хочете вийти?');"> Вийти</button>
 </form>
+<a href="{% url 'home' %}">На головну</a>

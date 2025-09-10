@@ -1,18 +1,34 @@
+{% include 'base/main_p_head.html' %}
+
 {% if user.is_authenticated %}
     <p>Вітаємо,
     <a href="{% url 'profile' %}">{{ user.username }}</a>!</p>
+
+    <form method="get" action="{% url 'search' %}">
+        <input type="text" name="q" placeholder="Пошук страв..." required>
+        <button type="submit">Знайти</button>
+    </form>
+
     <p>
         <a href="{% url 'category_list' %}">Меню</a> |
         <a href="{% url 'cart_detail' %}">Кошик</a> |
         <a href="{% url 'order_list' %}">Історія замовлень</a>
-        <form action="{% url 'logout' %}" method="post" style="display:inline;">
-            {% csrf_token %}
-        </form>
     </p>
+
+    <form action="{% url 'logout' %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit" onclick="return confirm('Ви впевнені, що хочете вийти?');">Вийти</button>
+    </form>
 {% else %}
     <p>
         <a href="{% url 'login' %}">Увійти</a>
         <a href="{% url 'register' %}">Зареєструватися</a>
     </p>
+
+    <form method="get" action="{% url 'search' %}">
+        <input type="text" name="q" placeholder="Пошук страв..." required>
+        <button type="submit">Знайти</button>
+    </form>
+
     <p><a href="{% url 'category_list' %}">Меню</a></p>
 {% endif %}

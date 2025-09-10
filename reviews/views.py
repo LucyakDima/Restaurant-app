@@ -40,6 +40,18 @@ class ReviewUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy("dish_detail", kwargs={"pk": self.object.dish.id})
 
+@login_required
+def edit_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id, user=request.user)
+    if request.method == "POST":
+        form = ReviewForm(request.POST, instance=review)
+        if form.is_valid():
+            form.save()
+            return redirect("review_list", dish_id=review.dish.id)
+    else:
+        form = ReviewForm(instance=review)
+    return render(request, "reviews/edit_review.html", {"form": form, "review": review})
+
 
 @method_decorator(login_required, name="dispatch")
 class ReviewListView(ListView):

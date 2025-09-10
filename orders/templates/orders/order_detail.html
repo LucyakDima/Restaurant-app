@@ -1,3 +1,5 @@
+{% include 'base/main_p_head.html' %}
+
 <h1>Замовлення #{{ order.id }}</h1>
 <p>Статус: {{ order.get_status_display }}</p>
 <p>Дата: {{ order.created_at }}</p>
