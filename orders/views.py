@@ -6,20 +6,41 @@ from .models import Order, OrderItem
 
 @login_required
 def create_order(request):
-    cart, _ = Cart.objects.get_or_create(user=request.user)
+    cart = get_object_or_404(Cart, user=request.user)
+
     if not cart.items.exists():
         return redirect("cart_detail")
-    order = Order.objects.create(user=request.user)
 
-    for item in cart.items.all():
-        OrderItem.objects.create(
-            order=order,
-            dish=item.dish,
-            quantity=item.quantity,
-            price=item.dish.price
+    if request.method == "POST":
+        payment_method = request.POST.get("payment_method")
+        full_name = request.POST.get("full_name")
+        email = request.POST.get("email")
+        phone = request.POST.get("phone", "")
+
+        # Перевіряємо, щоб були обов’язкові поля
+        if not full_name or not email:
+            return render(request, "orders/create_order.html", {
+                "cart": cart,
+                "error": "Будь ласка, введіть ім'я та електронну пошту."
+            })
+
+        # Створюємо замовлення
+        order = Order.objects.create(
+            user=request.user,
+            full_name=full_name,
+            email=email,
+            phone=phone,
+            payment_method=payment_method,
         )
-    cart.items.all().delete()
-    return redirect("order_detail", order_id=order.id)
+
+        # переносимо товари з кошика в замовлення
+        for item in cart.items.all():
+            OrderItem.objects.create(order=order, dish=item.dish, quantity=item.quantity)
+
+        cart.items.all().delete()
+        return redirect("order_detail", order_id=order.id)
+
+    return render(request, "orders/create_order.html", {"cart": cart})
 
 
 @login_required

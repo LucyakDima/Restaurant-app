@@ -1,17 +1,92 @@
 {% include 'base/main_p_head.html' %}
+{% load static %}
 
-<h1>Мої замовлення</h1>
+<style>
+    body {
+        padding: 2% 8%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: Arial, sans-serif;
+    }
 
-<ul>
-    {% for order in orders %}
-        <li>
-            <a href="{% url 'order_detail' order.id %}">
-                Замовлення #{{ order.id }} — {{ order.get_status_display }} — {{ order.total_price }} грн
-            </a>
-            | <a href="{% url 'repeat_order' order.id %}">Повторити</a>
-            | <a href="{% url 'delete_order' order.id %}" onclick="return confirm('Видалити це замовлення?');">Видалити</a>
-        </li>
-    {% empty %}
-        <li>У вас ще немає замовлень.</li>
-    {% endfor %}
-</ul>
+    .orders-empty {
+        position: relative;
+        display: inline-block;
+        margin-top: 40px;
+    }
+
+    .speech-bubble {
+        position: absolute;
+        top: 40px;
+        left: 80%;
+        background: #fff;
+        border: 1px solid #333;
+        border-radius: 10px;
+        padding: 14px 24px;
+        max-width: 450px;
+        text-align: center;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .speech-bubble::after {
+        content: "";
+        position: absolute;
+        top: 30px;
+        right: 100%;
+        border-width: 10px 14px 10px 0;
+        border-style: solid;
+        border-color: transparent #fff transparent transparent;
+    }
+
+    .speech-bubble::before {
+        content: "";
+        position: absolute;
+        top: 30px;
+        right: 100%;
+        border-width: 11px 15px 11px 0;
+        border-style: solid;
+        border-color: transparent #333 transparent transparent;
+    }
+
+    .vaultboy {
+        max-width: 400px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .speech-bubble a {
+        text-decoration: none;
+        color: #333;
+    }
+
+    .speech-bubble a:hover {
+        color: #0077cc;
+    }
+</style>
+
+<body>
+    <h1>Мої замовлення</h1>
+
+    <ul>
+        {% for order in orders %}
+            <li>
+                <a href="{% url 'order_detail' order.id %}">
+                    Замовлення #{{ order.id }} — {{ order.get_status_display }} — {{ order.total_price }} грн
+                </a>
+                | <a href="{% url 'repeat_order' order.id %}">Повторити</a>
+                | <a href="{% url 'delete_order' order.id %}" onclick="return confirm('Видалити це замовлення?');">Видалити</a>
+            </li>
+        {% empty %}
+            <h2>У вас ще немає замовлень.</h2>
+            <div class="orders-empty">
+                <img src="{% static 'vault-boy1.png' %}" alt="Vault Boy" class="vaultboy">
+                <div class="speech-bubble">
+                    <a href="{% url 'category_list' %}">Саме час створити нове замовлення!</a>
+                </div>
+            </div>
+        {% endfor %}
+    </ul>
+</body>

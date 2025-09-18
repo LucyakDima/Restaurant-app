@@ -1,20 +1,94 @@
 {% include 'base/main_p_head.html' %}
+{% load static %}
 
-<h1>Кошик</h1>
+<style>
+    body {
+        padding: 2% 8%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: Arial, sans-serif;
+    }
 
-{% if cart.items.all %}
-    <ul>
-    {% for item in cart.items.all %}
-        <li>
-            {{ item.dish.name }} — {{ item.quantity }} × {{ item.dish.price }} = {{ item.total_price }}
-            <a href="{% url 'update_quantity' item.id 'increase' %}">+</a>
-            <a href="{% url 'update_quantity' item.id 'decrease' %}">-</a>
-            <a href="{% url 'remove_from_cart' item.id %}">Видалити</a>
-        </li>
-    {% endfor %}
-    </ul>
-    <p>Загальна сума: {{ cart.total_price }} грн</p>
-    <p><a href="{% url 'create_order' %}">Оформити замовлення</a></p>
-{% else %}
-    <p>Кошик порожній</p>
-{% endif %}
+    .cart-empty {
+        position: relative;
+        display: inline-block;
+        margin-top: 40px;
+    }
+
+    .speech-bubble {
+        position: absolute;
+        top: 40px;
+        left: 80%;
+        background: #fff;
+        border: 1px solid #333;
+        border-radius: 10px;
+        padding: 14px 34px;
+        max-width: 450px;
+        text-align: center;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .speech-bubble::after {
+        content: "";
+        position: absolute;
+        top: 30px;
+        right: 100%;
+        border-width: 10px 14px 10px 0;
+        border-style: solid;
+        border-color: transparent #fff transparent transparent;
+    }
+
+    .speech-bubble::before {
+        content: "";
+        position: absolute;
+        top: 30px;
+        right: 100%;
+        border-width: 11px 15px 11px 0;
+        border-style: solid;
+        border-color: transparent #333 transparent transparent;
+    }
+
+    .vaultboy {
+        max-width: 500px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .speech-bubble a {
+        text-decoration: none;
+        color: #333;
+    }
+
+    .speech-bubble a:hover {
+        color: #ff6600;
+    }
+</style>
+
+<body>
+    <h1>Кошик</h1>
+    {% if cart.items.all %}
+        <ul>
+        {% for item in cart.items.all %}
+            <li>
+                {{ item.dish.name }} — {{ item.quantity }} × {{ item.dish.price }} = {{ item.total_price }}
+                <a href="{% url 'update_quantity' item.id 'increase' %}">+</a>
+                <a href="{% url 'update_quantity' item.id 'decrease' %}">-</a>
+                <a href="{% url 'remove_from_cart' item.id %}">Видалити</a>
+            </li>
+        {% endfor %}
+        </ul>
+        <p>Загальна сума: {{ cart.total_price }} грн</p>
+        <p><a href="{% url 'create_order' %}">Оформити замовлення</a></p>
+    {% else %}
+        <h2>Ваш кошик порожній</h2>
+        <div class="cart-empty">
+            <img src="{% static 'vault-boy2.png' %}" alt="Vault Boy" class="vaultboy">
+            <div class="speech-bubble">
+                <a href="{% url 'category_list' %}">Саме час чогось поїсти!</a>
+            </div>
+        </div>
+    {% endif %}
+</body>

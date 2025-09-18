@@ -1,34 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    <style>
+        body {
+            padding: 2% 8%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .menu-box {
+            width: 70%;
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+
+            background-image: url("{% static 'Fallout_restaurant.png' %}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 2%;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+
+            width: 35%;
+            height: 260px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            text-decoration: none;
+            color: black;
+            padding: 20px;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: 0.3s;
+        }
+
+        .menu-link:hover {
+            transform: scale(1.03);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+        }
+
+        .menu-img {
+            width: 100px;
+            height: auto;
+            flex-shrink: 0;
+        }
+
+        .menu-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .menu-text h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #333;
+        }
+
+        .menu-text p {
+            margin-top: 5px;
+            font-size: 1rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
 {% include 'base/main_p_head.html' %}
 
-{% if user.is_authenticated %}
-    <p>Вітаємо,
-    <a href="{% url 'profile' %}">{{ user.username }}</a>!</p>
+<div class="menu-box">
+    <a href="{% url 'category_list' %}" class="menu-link">
+        <img src="{% static 'vault-boy4.png' %}" alt="Vault Boy" class="menu-img">
+        <div class="menu-text">
+            <h2>Меню</h2>
+            <p>Страви прямо з всесвіту <i>Fallout</i></p>
+        </div>
+    </a>
+</div>
 
-    <form method="get" action="{% url 'search' %}">
-        <input type="text" name="q" placeholder="Пошук страв..." required>
-        <button type="submit">Знайти</button>
-    </form>
+<a href="{% url 'cart_detail' %}">Кошик</a>
+<a href="{% url 'order_list' %}">Історія замовлень</a>
 
-    <p>
-        <a href="{% url 'category_list' %}">Меню</a> |
-        <a href="{% url 'cart_detail' %}">Кошик</a> |
-        <a href="{% url 'order_list' %}">Історія замовлень</a>
-    </p>
-
-    <form action="{% url 'logout' %}" method="post" style="display:inline;">
-        {% csrf_token %}
-        <button type="submit" onclick="return confirm('Ви впевнені, що хочете вийти?');">Вийти</button>
-    </form>
-{% else %}
-    <p>
-        <a href="{% url 'login' %}">Увійти</a>
-        <a href="{% url 'register' %}">Зареєструватися</a>
-    </p>
-
-    <form method="get" action="{% url 'search' %}">
-        <input type="text" name="q" placeholder="Пошук страв..." required>
-        <button type="submit">Знайти</button>
-    </form>
-
-    <p><a href="{% url 'category_list' %}">Меню</a></p>
-{% endif %}
+</body>
+</html>
