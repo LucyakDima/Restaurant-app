@@ -1,10 +1,242 @@
 {% include 'base/main_p_head.html' %}
+{% load static %}
 
-<h2>Реєстрація</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Зареєструватися</button>
-</form>
-<a href="{% url 'login' %}">Увійти</a>
-<a href="{% url 'home' %}">На головну</a>
+<style>
+    .auth-container {
+        max-width: 500px;
+        margin: 60px auto;
+        padding: 40px;
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #ff6600;
+    }
+
+    .auth-header h2 {
+        margin: 0;
+        color: #333;
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .auth-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: #ff6600;
+        margin: 0 auto 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        color: white;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: bold;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: #fff;
+        box-sizing: border-box;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: #ff6600;
+        box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.1);
+    }
+
+    .form-group .helptext {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-top: 5px;
+        line-height: 1.4;
+    }
+
+    .form-group .errorlist {
+        list-style: none;
+        padding: 0;
+        margin: 5px 0 0 0;
+    }
+
+    .form-group .errorlist li {
+        color: #dc3545;
+        font-size: 0.9rem;
+        background-color: #f8d7da;
+        padding: 8px 12px;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        border-left: 4px solid #dc3545;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+
+    .btn-primary {
+        background-color: #ff6600;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #e65c00;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(255, 102, 0, 0.3);
+    }
+
+    .auth-links {
+        text-align: center;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #e9ecef;
+    }
+
+    .auth-links a {
+        color: #ff6600;
+        text-decoration: none;
+        font-weight: bold;
+        margin: 0 10px;
+        transition: color 0.3s ease;
+    }
+
+    .auth-links a:hover {
+        color: #e65c00;
+        text-decoration: underline;
+    }
+
+    .required-field::after {
+        content: " *";
+        color: #dc3545;
+        font-weight: bold;
+    }
+
+    .password-requirements {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-left: 4px solid #17a2b8;
+    }
+
+    .password-requirements h4 {
+        margin: 0 0 10px 0;
+        color: #17a2b8;
+        font-size: 0.9rem;
+    }
+
+    .password-requirements ul {
+        margin: 0;
+        padding-left: 20px;
+        font-size: 0.8rem;
+        color: #6c757d;
+    }
+
+    @media (max-width: 768px) {
+        .auth-container {
+            margin: 20px;
+            padding: 30px 20px;
+        }
+    }
+</style>
+
+<div class="auth-container">
+    <div class="auth-header">
+        <div class="auth-icon">📝</div>
+        <h2>Реєстрація</h2>
+    </div>
+
+    <div class="password-requirements">
+        <h4>Вимоги до паролю:</h4>
+        <ul>
+            <li>Мінімум 8 символів</li>
+            <li>Не може бути схожим на ваше ім'я користувача</li>
+            <li>Не може бути занадто простим</li>
+            <li>Не може складатися лише з цифр</li>
+        </ul>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}"
+                       {% if field.field.required %}class="required-field"{% endif %}>
+                    {{ field.label }}
+                </label>
+                {{ field }}
+
+                {% if field.help_text %}
+                    <div class="helptext">{{ field.help_text }}</div>
+                {% endif %}
+
+                {% if field.errors %}
+                    <ul class="errorlist">
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        {% if form.non_field_errors %}
+            <div class="form-group">
+                <ul class="errorlist">
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary">
+            Зареєструватися
+        </button>
+    </form>
+
+    <div class="auth-links">
+        <p>Вже маєте акаунт?</p>
+        <a href="{% url 'login' %}">Увійти</a>
+        <span>|</span>
+        <a href="{% url 'home' %}">На головну</a>
+    </div>
+</div>
