@@ -65,7 +65,6 @@ def repeat_order(request, order_id):
             order=new_order,
             dish=item.dish,
             quantity=item.quantity,
-            price=item.price
         )
     return redirect("order_detail", order_id=new_order.id)
 

@@ -2,9 +2,23 @@ from django.views.generic import TemplateView
 from django.shortcuts import render
 from menu.models import Dish, Category
 from django.db.models.functions import Lower
+from django.db.models import Sum
 
 class HomeView(TemplateView):
     template_name = "base/main_page.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        dishes_with_count = Dish.objects.annotate(
+            total_orders=Sum("orderitem__quantity")
+        ).order_by("-total_orders")
+        if not dishes_with_count.exists() or dishes_with_count.first().total_orders is None:
+            popular_dishes = Dish.objects.all()[:3]
+        else:
+            popular_dishes = dishes_with_count[:3]
+        context["popular_dishes"] = popular_dishes
+        return context
 
 def search(request):
     query = request.GET.get("q", "")

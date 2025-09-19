@@ -1,35 +1,92 @@
 {% include 'base/main_p_head.html' %}
+{% load static %}
 
-<h2>{{ dish.name }}</h2>
-<p><strong>Опис:</strong> {{ dish.description }}</p>
-<p><strong>Ціна:</strong> {{ dish.price }} грн</p>
-<p><strong>Інгредієнти:</strong> {{ dish.ingredients }}</p>
+<style>
+    body {
+        padding: 2% 8%;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-{% if dish.image %}
-    <img src="{{ dish.image.url }}" alt="{{ dish.name }}" width="300">
-{% else %}
-    <p><em>Зображення відсутнє</em></p>
-{% endif %}
+    .dish-container {
+        max-width: 700px;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-top: 20px;
+    }
 
-{% if user.is_authenticated %}
-    {% if dish.id in cart_items %}
-        <a href="{% url 'cart_detail' %}">Переглянути у кошику</a>
-    {% else %}
-        <a href="{% url 'add_to_cart' dish.id %}">Додати у кошик</a>
-    {% endif %}
-{% else %}
-    <p><a href="{% url 'login' %}">Увійдіть</a>, щоб додати у кошик</p>
-{% endif %}
+    .dish-container img {
+        width: 100%;
+        max-height: 350px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
 
-<a href="{% url 'review_list' dish.id %}">Переглянути відгуки</a>
+    .dish-container h2 {
+        margin: 0 0 10px;
+        font-size: 1.8rem;
+        color: #333;
+    }
 
-<br>
-<a href="{% url 'dish_list' dish.category.id %}">Назад до страв</a>
+    .dish-container p {
+        margin: 5px 0;
+        font-size: 1rem;
+        color: #444;
+    }
 
-{% if user.is_authenticated and user.role == "admin" %}
-    <a href="{% url 'dish_edit' dish.id %}">Редагувати</a>
-    <form method="post" action="{% url 'dish_delete' object.id %}" onsubmit="return confirm('Ви дійсно хочете видалити цю страву?');">
-        {% csrf_token %}
-        <button type="submit">Видалити</button>
-    </form>
-{% endif %}
+    .dish-actions a, .dish-actions button {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 8px 16px;
+        background: #333;
+        color: #fff;
+        border-radius: 6px;
+        text-decoration: none;
+    }
+
+    .dish-actions a:hover, .dish-actions button:hover {
+        background: #ff6600;
+    }
+
+</style>
+
+<body>
+    <div class="dish-container">
+        <h2>{{ dish.name }}</h2>
+        {% if dish.image %}
+            <img src="{{ dish.image.url }}" alt="{{ dish.name }}">
+        {% endif %}
+
+        <p><strong>Опис:</strong> {{ dish.description }}</p>
+        <p><strong>Ціна:</strong> {{ dish.price }} грн</p>
+        <p><strong>Інгредієнти:</strong> {{ dish.ingredients }}</p>
+
+        <div class="dish-actions">
+            {% if user.is_authenticated %}
+                {% if dish.id in cart_items %}
+                    <a href="{% url 'cart_detail' %}">Переглянути у кошику</a>
+                {% else %}
+                    <a href="{% url 'add_to_cart' dish.id %}">Додати у кошик</a>
+                {% endif %}
+            {% else %}
+                <a href="{% url 'login' %}">Увійдіть, щоб додати у кошик</a>
+            {% endif %}
+
+            <a href="{% url 'review_list' dish.id %}">Переглянути відгуки</a>
+            <a href="{% url 'dish_list' dish.category.id %}">Назад до страв</a>
+
+            {% if user.is_authenticated and user.role == "admin" %}
+                <a href="{% url 'dish_edit' dish.id %}">Редагувати</a>
+                <form method="post" action="{% url 'dish_delete' object.id %}" style="display:inline;" onsubmit="return confirm('Ви дійсно хочете видалити цю страву?');">
+                    {% csrf_token %}
+                    <button type="submit">Видалити</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</body>

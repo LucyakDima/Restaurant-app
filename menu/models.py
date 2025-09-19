@@ -1,12 +1,14 @@
 from django.db import models
 from django.core.validators import MinLengthValidator
 from django.core.exceptions import ValidationError
+from django.db.models import Sum
 import os
 
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to="categories/", blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -31,4 +33,5 @@ class Dish(models.Model):
     def __str__(self):
         return f"{self.name} - {self.price} грн"
 
-
+    def orders_count(self):
+        return self.orderitem_set.aggregate(total=Sum("quantity"))["total"] or 0

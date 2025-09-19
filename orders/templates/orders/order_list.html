@@ -65,28 +65,65 @@
     .speech-bubble a:hover {
         color: #0077cc;
     }
+
+    .order-list {
+        width: 100%;
+        max-width: 800px;
+        margin-top: 20px;
+    }
+
+    .order-item {
+        background: #fff;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .order-item h3 {
+        margin: 0 0 8px;
+        font-size: 1.1rem;
+        color: #333;
+    }
+
+    .order-actions a {
+        margin-right: 10px;
+        text-decoration: none;
+        background: #333;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+    .order-actions a:hover {
+        background: #ff6600;
+    }
 </style>
 
 <body>
     <h1>Мої замовлення</h1>
 
-    <ul>
-        {% for order in orders %}
-            <li>
-                <a href="{% url 'order_detail' order.id %}">
-                    Замовлення #{{ order.id }} — {{ order.get_status_display }} — {{ order.total_price }} грн
-                </a>
-                | <a href="{% url 'repeat_order' order.id %}">Повторити</a>
-                | <a href="{% url 'delete_order' order.id %}" onclick="return confirm('Видалити це замовлення?');">Видалити</a>
-            </li>
-        {% empty %}
-            <h2>У вас ще немає замовлень.</h2>
-            <div class="orders-empty">
-                <img src="{% static 'vault-boy1.png' %}" alt="Vault Boy" class="vaultboy">
-                <div class="speech-bubble">
-                    <a href="{% url 'category_list' %}">Саме час створити нове замовлення!</a>
+    {% if orders %}
+        <div class="order-list">
+            {% for order in orders %}
+                <div class="order-item">
+                    <h3>Замовлення #{{ order.id }} — {{ order.get_status_display }} — {{ order.total_price }} грн</h3>
+                    <div class="order-actions">
+                        <a href="{% url 'order_detail' order.id %}">Переглянути</a>
+                        <a href="{% url 'repeat_order' order.id %}">Повторити</a>
+                        <a href="{% url 'delete_order' order.id %}" onclick="return confirm('Видалити це замовлення?');">Видалити</a>
+                    </div>
                 </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h2>У вас ще немає замовлень.</h2>
+        <div class="orders-empty">
+            <img src="{% static 'vault-boy1.png' %}" alt="Vault Boy" class="vaultboy">
+            <div class="speech-bubble">
+                <a href="{% url 'category_list' %}">Саме час створити нове замовлення!</a>
             </div>
-        {% endfor %}
-    </ul>
+        </div>
+    {% endif %}
+
 </body>
