@@ -65,6 +65,61 @@
     .checkout-btn:hover {
         background: #e65c00;
     }
+    .cart-empty {
+        position: relative;
+        display: inline-block;
+        margin-top: 40px;
+    }
+
+    .speech-bubble {
+        position: absolute;
+        top: 40px;
+        left: 80%;
+        background: #fff;
+        border: 1px solid #333;
+        border-radius: 10px;
+        padding: 14px 24px;
+        max-width: 450px;
+        text-align: center;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .speech-bubble::after {
+        content: "";
+        position: absolute;
+        top: 30px;
+        right: 100%;
+        border-width: 10px 14px 10px 0;
+        border-style: solid;
+        border-color: transparent #fff transparent transparent;
+    }
+
+    .speech-bubble::before {
+        content: "";
+        position: absolute;
+        top: 30px;
+        right: 100%;
+        border-width: 11px 15px 11px 0;
+        border-style: solid;
+        border-color: transparent #333 transparent transparent;
+    }
+
+    .vaultboy {
+        max-width: 500px;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .speech-bubble a {
+        text-decoration: none;
+        color: #333;
+    }
+
+    .speech-bubble a:hover {
+        color: #ff6600;
+    }
 </style>
 
 <body>

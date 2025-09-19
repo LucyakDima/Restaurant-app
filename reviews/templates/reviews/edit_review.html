@@ -1,11 +1,167 @@
-{% include 'base/main_p_head.html' %}
+// {% include 'base/main_p_head.html' %}
+{% load static %}
 
-<h2>Редагувати відгук для {{ review.dish.name }}</h2>
+<style>
+    /* Загальні стилі контейнера */
+    .review-container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
+    .form-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #ff6600;
+    }
 
-    <button type="submit">Зберегти зміни</button>
-    <a href="{% url 'review_list' review.dish.id %}">Скасувати</a>
-</form>
+    .form-header h2 {
+        margin: 0;
+        color: #333;
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    /* Стилі для елементів форми */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: bold;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background-color: #fff;
+        box-sizing: border-box;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #ff6600;
+        box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.1);
+    }
+
+    .form-group .errorlist {
+        list-style: none;
+        padding: 0;
+        margin: 5px 0 0 0;
+    }
+
+    .form-group .errorlist li {
+        color: #dc3545;
+        font-size: 0.9rem;
+        background-color: #f8d7da;
+        padding: 8px 12px;
+        border-radius: 5px;
+        margin-bottom: 5px;
+        border-left: 4px solid #dc3545;
+    }
+
+    /* Стилі для кнопок у стилі категорій */
+    .form-actions {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #333;
+        color: #fff;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s ease;
+        text-align: center;
+    }
+
+    .btn:hover,
+    .btn:focus {
+        background-color: #e65c00;
+        outline: none;
+    }
+
+    /* Адаптивність */
+    @media (max-width: 768px) {
+        .review-container {
+            margin: 20px;
+            padding: 20px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn {
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="review-container">
+    <div class="form-header">
+        <h2>Редагувати відгук для {{ review.dish.name }}</h2>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <ul class="errorlist">
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        {% if form.non_field_errors %}
+            <div class="form-group">
+                <ul class="errorlist">
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <div class="form-actions">
+            <button type="submit" class="btn">Зберегти зміни</button>
+            <a href="{% url 'review_list' review.dish.id %}" class="btn">Скасувати</a>
+        </div>
+    </form>
+</div>

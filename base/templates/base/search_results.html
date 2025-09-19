@@ -1,29 +1,117 @@
 {% include 'base/main_p_head.html' %}
+{% load static %}
 
-<h2>Результати пошуку для "{{ query }}"</h2>
+<style>
+    body {
+        padding: 2% 8%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: Arial, sans-serif;
+    }
 
-{% if dishes %}
-    <h3>{{ dish.category }}</h3>
-    <ul>
-        {% for dish in dishes %}
-            <li>
-                <a href="{% url 'dish_detail' dish.id %}">{{ dish.name }}</a> - {{ dish.price }} грн
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>Такої страви немає</p>
-{% endif %}
+    h2 {
+        margin-top: 20px;
+        font-size: 1.8rem;
+        color: #333;
+        text-align: center;
+    }
 
-{% if categories %}
-    <h3>Категорії</h3>
-    <ul>
-        {% for cat in categories %}
-            <li>
-                <a href="{% url 'dish_list' cat.id %}">{{ cat.name }}</a>
-            </li>
-        {% endfor %}
-    </ul>
-{% endif %}
+    h3 {
+        margin-top: 30px;
+        font-size: 1.4rem;
+        color: #444;
+        border-bottom: 2px solid #eee;
+        padding-bottom: 5px;
+        width: 100%;
+        max-width: 800px;
+    }
 
-<a href="{% url 'home' %}">Назад</a>
+    .results-list,
+    .categories-list {
+        list-style: none;
+        padding: 0;
+        margin-top: 15px;
+        width: 100%;
+        max-width: 800px;
+    }
+
+    .result-item,
+    .category-item {
+        background: #fff;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .result-item a,
+    .category-item a {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+    }
+
+    .result-item a:hover,
+    .category-item a:hover {
+        color: #0077cc;
+    }
+
+    .price {
+        font-size: 1rem;
+        color: #666;
+    }
+
+    .back-link {
+        margin-top: 30px;
+        text-decoration: none;
+        background: #333;
+        color: #fff;
+        padding: 8px 16px;
+        border-radius: 6px;
+    }
+
+    .back-link:hover {
+        background: #ff6600;
+    }
+
+    .empty-message {
+        margin-top: 40px;
+        font-size: 1.2rem;
+        color: #555;
+    }
+</style>
+
+<body>
+    <h2>Результати пошуку для "{{ query }}"</h2>
+
+    {% if dishes %}
+        <h3>Страви</h3>
+        <ul class="results-list">
+            {% for dish in dishes %}
+                <li class="result-item">
+                    <a href="{% url 'dish_detail' dish.id %}">{{ dish.name }}</a>
+                    <span class="price">{{ dish.price }} грн</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p class="empty-message">Такої страви немає</p>
+    {% endif %}
+
+    {% if categories %}
+        <h3>Категорії</h3>
+        <ul class="categories-list">
+            {% for cat in categories %}
+                <li class="category-item">
+                    <a href="{% url 'dish_list' cat.id %}">{{ cat.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <a href="{% url 'home' %}" class="back-link">Назад</a>
+</body>

@@ -1,39 +1,166 @@
-{% include 'base/main_p_head.html' %}
+// {% include 'base/main_p_head.html' %}
+{% load static %}
 
-<h2>Оформлення замовлення</h2>
+<style>
+    .order-container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        font-family: Arial, sans-serif;
+    }
 
-{% if cart.items.all %}
-    <ul>
-        {% for item in cart.items.all %}
-            <li>{{ item.dish.name }} — {{ item.quantity }} × {{ item.dish.price }} грн</li>
-        {% endfor %}
-    </ul>
-    <p><strong>Загальна сума:</strong> {{ cart.total_price }} грн</p>
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+        font-size: 2rem;
+        font-weight: bold;
+        border-bottom: 2px solid #ff6600;
+        padding-bottom: 20px;
+    }
 
-    {% if error %}
-        <p style="color: red;">{{ error }}</p>
+    ul {
+        list-style: none;
+        padding-left: 0;
+        margin-bottom: 20px;
+        color: #555;
+        font-size: 1rem;
+    }
+
+    ul li {
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    p strong {
+        color: #333;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+
+    /* Повідомлення про помилку */
+    .error-message {
+        color: #dc3545;
+        background-color: #f8d7da;
+        padding: 10px 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border-left: 4px solid #dc3545;
+    }
+
+    form label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: bold;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    form input[type="text"],
+    form input[type="email"],
+    form select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        font-size: 1rem;
+        margin-bottom: 20px;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+        background-color: #fff;
+    }
+
+    form input[type="text"]:focus,
+    form input[type="email"]:focus,
+    form select:focus {
+        outline: none;
+        border-color: #ff6600;
+        box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.1);
+    }
+
+    /* Кнопка у стилі категорій */
+    button[type="submit"] {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #333;
+        color: #fff;
+        border-radius: 5px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s ease;
+        text-align: center;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+        display: block;
+    }
+
+    button[type="submit"]:hover,
+    button[type="submit"]:focus {
+        background-color: #e65c00;
+        outline: none;
+    }
+
+    /* Повідомлення про порожній кошик */
+    .empty-cart {
+        text-align: center;
+        color: #666;
+        font-size: 1.1rem;
+        margin-top: 40px;
+    }
+
+    /* Адаптивність */
+    @media (max-width: 768px) {
+        .order-container {
+            margin: 20px;
+            padding: 20px;
+        }
+    }
+</style>
+
+<div class="order-container">
+    <h2>Оформлення замовлення</h2>
+
+    {% if cart.items.all %}
+        <ul>
+            {% for item in cart.items.all %}
+                <li>{{ item.dish.name }} — {{ item.quantity }} × {{ item.dish.price }} грн</li>
+            {% endfor %}
+        </ul>
+        <p><strong>Загальна сума:</strong> {{ cart.total_price }} грн</p>
+
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label for="full_name">Ім'я:</label>
+            <input type="text" id="full_name" name="full_name" required>
+
+            <label for="email">Електронна пошта:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="phone">Телефон (необов’язково):</label>
+            <input type="text" id="phone" name="phone">
+
+            <label for="payment">Спосіб оплати:</label>
+            <select name="payment_method" id="payment">
+                <option value="card">Оплата карткою</option>
+                <option value="cash" selected>Оплата при отриманні</option>
+            </select>
+
+            <button type="submit">Підтвердити замовлення</button>
+        </form>
+    {% else %}
+        <p class="empty-cart">Ваш кошик порожній.</p>
     {% endif %}
-
-    <form method="post">
-        {% csrf_token %}
-
-        <label for="full_name">Ім'я:</label>
-        <input type="text" id="full_name" name="full_name" required><br>
-
-        <label for="email">Електронна пошта:</label>
-        <input type="email" id="email" name="email" required><br>
-
-        <label for="phone">Телефон (необов’язково):</label>
-        <input type="text" id="phone" name="phone"><br>
-
-        <label for="payment">Спосіб оплати:</label>
-        <select name="payment_method" id="payment">
-            <option value="card">Оплата карткою</option>
-            <option value="cash" selected>Оплата при отриманні</option>
-        </select><br><br>
-
-        <button type="submit">Підтвердити замовлення</button>
-    </form>
-{% else %}
-    <p>Ваш кошик порожній.</p>
-{% endif %}
+</div>

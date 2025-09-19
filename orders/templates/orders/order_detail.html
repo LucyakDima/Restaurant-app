@@ -1,17 +1,116 @@
-{% include 'base/main_p_head.html' %}
+// {% include 'base/main_p_head.html' %}
+{% load static %}
 
-<h1>Замовлення #{{ order.id }}</h1>
-<p>Статус: {{ order.get_status_display }}</p>
-<p>Дата: {{ order.created_at }}</p>
+<style>
+    .order-detail-container {
+        max-width: 700px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: rgba(255, 255, 255, 0.95);
+        border-radius: 15px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        font-family: Arial, sans-serif;
+        color: #333;
+    }
 
-<ul>
-    {% for item in order.items.all %}
-        <li>{{ item.dish.name }} — {{ item.quantity }} х {{ item.price }} = {{ item.total_price }}</li>
-    {% endfor %}
-</ul>
+    h1 {
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #ff6600;
+        padding-bottom: 15px;
+        text-align: center;
+    }
 
-<p><strong>Загальна сума:</strong> {{ order.total_price }} грн</p>
+    p {
+        font-size: 1rem;
+        margin: 8px 0;
+    }
 
-<a href="{% url 'repeat_order' order.id %}">Повторити замовлення</a>
-<a href="{% url 'delete_order' order.id %}" onclick="return confirm('Видалити це замовлення?');">Видалити</a>
-<a href="{% url 'order_list' %}">Назад до списку</a>
+    ul {
+        list-style: none;
+        padding-left: 0;
+        margin: 20px 0;
+        color: #555;
+        font-size: 1rem;
+    }
+
+    ul li {
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    p strong {
+        font-weight: 700;
+        font-size: 1.1rem;
+        color: #333;
+    }
+
+    /* Кнопки у стилі категорій */
+    .action-links {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+
+    .action-links a {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #333;
+        color: #fff;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s ease;
+        text-align: center;
+    }
+
+    .action-links a:hover,
+    .action-links a:focus {
+        background-color: #e65c00;
+        outline: none;
+    }
+
+    /* Адаптивність */
+    @media (max-width: 768px) {
+        .order-detail-container {
+            margin: 20px;
+            padding: 20px;
+        }
+
+        .action-links {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .action-links a {
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="order-detail-container">
+    <h1>Замовлення #{{ order.id }}</h1>
+    <p>Статус: {{ order.get_status_display }}</p>
+    <p>Дата: {{ order.created_at }}</p>
+
+    <ul>
+        {% for item in order.items.all %}
+            <li>{{ item.dish.name }} — {{ item.quantity }} х {{ item.price }} = {{ item.total_price }}</li>
+        {% endfor %}
+    </ul>
+
+    <p><strong>Загальна сума:</strong> {{ order.total_price }} грн</p>
+
+    <div class="action-links">
+        <a href="{% url 'repeat_order' order.id %}">Повторити замовлення</a>
+        <a href="{% url 'delete_order' order.id %}" onclick="return confirm('Видалити це замовлення?');">Видалити</a>
+        <a href="{% url 'order_list' %}">Назад до списку</a>
+    </div>
+</div>
